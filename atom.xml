@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://greenwoodcm.github.io/atom.xml" rel="self"/>
   <link href="http://greenwoodcm.github.io/"/>
-  <updated>2013-05-23T14:31:24-04:00</updated>
+  <updated>2013-05-23T14:38:50-04:00</updated>
   <id>http://greenwoodcm.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -12,5 +12,14 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Test post]]></title>
+    <link href="http://greenwoodcm.github.io/blog/2013/05/23/test-post/"/>
+    <updated>2013-05-23T14:38:00-04:00</updated>
+    <id>http://greenwoodcm.github.io/blog/2013/05/23/test-post</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
 </feed>
