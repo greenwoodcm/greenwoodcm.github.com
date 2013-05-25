@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: snippet | My Octopress Blog]]></title>
+  <title><![CDATA[Category: snippet | Chris Greenwood]]></title>
   <link href="http://greenwoodcm.github.io/blog/categories/snippet/atom.xml" rel="self"/>
   <link href="http://greenwoodcm.github.io/"/>
-  <updated>2013-05-24T22:52:04-04:00</updated>
+  <updated>2013-05-24T23:01:15-04:00</updated>
   <id>http://greenwoodcm.github.io/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Chris Greenwood]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
