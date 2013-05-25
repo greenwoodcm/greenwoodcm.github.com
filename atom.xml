@@ -4,10 +4,10 @@
   <title><![CDATA[Chris Greenwood]]></title>
   <link href="http://cmgreenwood.com/atom.xml" rel="self"/>
   <link href="http://cmgreenwood.com/"/>
-  <updated>2013-05-24T23:02:45-04:00</updated>
+  <updated>2013-05-24T23:28:22-04:00</updated>
   <id>http://cmgreenwood.com/</id>
   <author>
-    <name><![CDATA[Chris Greenwood]]></name>
+    <name><![CDATA[{"name"=>&#8220;Chris Greenwood&#8221;, &#8220;email&#8221;=>&#8221;greenwoodcm@gmail.com&#8221;}]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>

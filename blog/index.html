@@ -5,13 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - Chris Greenwood</title>
+  <title>Chris Greenwood</title>
   <meta name="author" content="{"name"=>"Chris Greenwood", "email"=>"greenwoodcm@gmail.com"}">
 
   
-  <meta name="description" content="Blog Archive 2013 UITableViewCell from Nib
-May 23 2013 posted in snippet RestKit POST with nested data
-May 23 2013 posted in snippet Recent Posts &hellip;">
+  <meta name="description" content="As far as I can tell, this is the best and most correct way to create a custom UITableViewCell that has a backing Objective-C class (so custom &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +18,7 @@ May 23 2013 posted in snippet Recent Posts &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://cmgreenwood.com/blog/archives">
+  <link rel="canonical" href="http://cmgreenwood.com/blog">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Chris Greenwood" type="application/atom+xml">
@@ -67,54 +65,97 @@ May 23 2013 posted in snippet Recent Posts &hellip;">
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/23/test-post/">UITableViewCell From Nib</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-23T14:38:00-04:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives">
 
 
-
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/blog/2013/05/23/test-post/">UITableViewCell from Nib</a></h1>
-<time datetime="2013-05-23T14:38:00-04:00" pubdate><span class='month'>May</span> <span class='day'>23</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/snippet/'>snippet</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/05/23/restkit-post/">RestKit POST with nested data</a></h1>
-<time datetime="2013-05-23T00:00:00-04:00" pubdate><span class='month'>May</span> <span class='day'>23</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/snippet/'>snippet</a></span>
-</footer>
-
-
-</article>
+  <div class="entry-content"><p>As far as I can tell, this is the best and most correct way to create a custom UITableViewCell that has a backing Objective-C class (so custom subviews) and is layed out using a Nib.  If anyone knows of a better way to do it, let me know.  There&rsquo;s a bunch of conflicting information on the web.</p>
 
 </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/23/test-post/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/23/restkit-post/">RestKit POST With Nested Data</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
 
   
-</article>
+
+
+<time datetime="2013-05-23T00:00:00-04:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am using <a href="http://www.restkit.org">RestKit</a> to map objects in my iPhone application to RESTful requests to my <a href="http://flask.pocoo.org/">Flask</a> server.  I have to use RKRequestMapping to specify the format of the data a POST request expects.  This works fine when the data is flat, but I had trouble when there was an array of nested mappings that needed to be accounted for.  For example, here is the object that will be passed as data to the POST request:</p>
 
 </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/23/restkit-post/">Read on &rarr;</a>
+    </footer>
+  
 
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
 <aside class="sidebar">
   
     <section>
@@ -135,7 +176,7 @@ May 23 2013 posted in snippet Recent Posts &hellip;">
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
+    <li class="loading">Status updating&#8230;</li>
   </ul>
   
   <a href="https://github.com/greenwoodcm">@greenwoodcm</a> on GitHub
@@ -167,7 +208,6 @@ May 23 2013 posted in snippet Recent Posts &hellip;">
 
   
 </aside>
-
 
     </div>
   </div>

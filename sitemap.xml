@@ -2,7 +2,7 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://cmgreenwood.com/blog/2013/05/23/restkit-post/</loc>
-        <lastmod>2013-05-24T22:51:25-04:00</lastmod>
+        <lastmod>2013-05-24T23:08:52-04:00</lastmod>
     </url>
     <url>
         <loc>http://cmgreenwood.com/blog/2013/05/23/test-post/</loc>
@@ -10,11 +10,19 @@
     </url>
     <url>
         <loc>http://cmgreenwood.com/blog/archives/</loc>
-        <lastmod>2013-05-24T22:51:25-04:00</lastmod>
+        <lastmod>2013-05-24T23:08:52-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://cmgreenwood.com/blog/</loc>
+        <lastmod>2013-05-24T23:13:35-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://cmgreenwood.com/home/</loc>
+        <lastmod>2013-05-24T23:08:14-04:00</lastmod>
     </url>
     <url>
         <loc>http://cmgreenwood.com/</loc>
-        <lastmod>2013-05-24T22:51:25-04:00</lastmod>
+        <lastmod>2013-05-24T23:25:48-04:00</lastmod>
     </url>
     <url>
         <loc>http://cmgreenwood.com/robots.txt</loc>
