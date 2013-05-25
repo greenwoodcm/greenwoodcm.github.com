@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
-  <link href="http://greenwoodcm.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: snippet | My Octopress Blog]]></title>
+  <link href="http://greenwoodcm.github.io/blog/categories/snippet/atom.xml" rel="self"/>
   <link href="http://greenwoodcm.github.io/"/>
   <updated>2013-05-24T22:52:04-04:00</updated>
   <id>http://greenwoodcm.github.io/</id>
@@ -38,21 +38,22 @@
 
 <p>The cell needs to be instantiated using the Nib to display your custom layout:</p>
 
-<div>
-  <pre><code class='c'>...
-NSString *ident = @&quot;customCell&quot;;
-CustomTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ident];
+<p><div>
+  <pre><code class='c'>&amp;hellip;
+NSString &lt;em&gt;ident = @&amp;ldquo;customCell&amp;rdquo;;
+CustomTableViewCell &lt;/em&gt;cell = [tableView dequeueReusableCellWithIdentifier:ident];&lt;/p&gt;
 
-if(!cell)
-{
-    NSArray *tlobjs = [[NSBundle mainBundle] loadNibNamed:@&quot;CustomTableViewCell&quot; owner:nil options:nil];
-    cell = (CustomTableViewCell*)[tlobjs objectAtIndex:0];
-}
-...</code></pre>
+&lt;p&gt;if(!cell)
+{&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSArray *tlobjs = [[NSBundle mainBundle] loadNibNamed:@&quot;CustomTableViewCell&quot; owner:nil options:nil];
+cell = (CustomTableViewCell*)[tlobjs objectAtIndex:0];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}
+&amp;hellip;</code></pre>
 </div>
-
-
-
+</p>
 ]]></content>
   </entry>
   
@@ -66,47 +67,45 @@ if(!cell)
 <!-- more -->
 
 
+<p><div>
+  <pre><code class='objective-c'>interface TestArgs : NSObject&lt;/p&gt;
 
+&lt;p&gt;property (copy, nonatomic) NSString &lt;em&gt;name;
+property (strong, nonatomic) NSArray &lt;/em&gt;users;&lt;/p&gt;
 
-<div>
-  <pre><code class='objective-c'>interface TestArgs : NSObject
-
-property (copy, nonatomic) NSString *name;
-property (strong, nonatomic) NSArray *users;
-
-end</code></pre>
+&lt;p&gt;end</code></pre>
 </div>
-
+</p>
 
 <p>The users array is an array of dictionaries, each containing the keys {&lsquo;id&rsquo;, &lsquo;type&rsquo;}.  What I expected to see on the Flask end in the <code>request.form</code> variable was:</p>
 
-<div>
-  <pre><code class='python'>{'name': 'theName', 'users': [{'id':1, 'type':'user'},{'id':2,'type':'admin'}]}</code></pre>
+<p><div>
+  <pre><code class='python'>{&amp;lsquo;name&amp;rsquo;: &amp;lsquo;theName&amp;rsquo;, &amp;lsquo;users&amp;rsquo;: [{&amp;lsquo;id&amp;rsquo;:1, &amp;lsquo;type&amp;rsquo;:&amp;lsquo;user&amp;rsquo;},{&amp;lsquo;id&amp;rsquo;:2,&amp;lsquo;type&amp;rsquo;:&amp;lsquo;admin&amp;rsquo;}]}</code></pre>
 </div>
-
+</p>
 
 <p>What I actually got was:</p>
 
-<div>
-  <pre><code class='python'>{'name': 'theName', 'users[][&quot;id&quot;]': 1, 'users[][&quot;id&quot;]': 2, 'users[][&quot;type&quot;]': 'user', 'users[][&quot;type&quot;]': 'admin'}</code></pre>
+<p><div>
+  <pre><code class='python'>{&amp;lsquo;name&amp;rsquo;: &amp;lsquo;theName&amp;rsquo;, &amp;lsquo;users[][&amp;ldquo;id&amp;rdquo;]&amp;rsquo;: 1, &amp;lsquo;users[][&amp;ldquo;id&amp;rdquo;]&amp;rsquo;: 2, &amp;lsquo;users[][&amp;ldquo;type&amp;rdquo;]&amp;rsquo;: &amp;lsquo;user&amp;rsquo;, &amp;lsquo;users[][&amp;ldquo;type&amp;rdquo;]&amp;rsquo;: &amp;lsquo;admin&amp;rsquo;}</code></pre>
 </div>
-
+</p>
 
 <p>Not very helpful.  The reason this happens is that form data is generally encoded in URL encoding, not JSON encoding.  URL encoding doesn&rsquo;t handle array values very well, so I needed to use JSON encoding to capture the nested information I wanted to send.  Took me a while, but as it turns out I had to change two things in my code to make this work.  First, on the client side, I had to change the serialization type that RestKit uses to serialize POST data:</p>
 
-<div>
-  <pre><code class='objective-c'>RKObjectManager *objectManager = ...
+<p><div>
+  <pre><code class='objective-c'>RKObjectManager *objectManager = &amp;hellip;
 [objectManager setRequestSerializationMIMEType:RKMIMETypeJSON];</code></pre>
 </div>
-
+</p>
 
 <p>Second, on the server side, I had to access the JSON data that was submitted with the POST differently:</p>
 
-<div>
+<p><div>
   <pre><code class='python'>post_data = request.json
-user_array = post_data['users']</code></pre>
+user_array = post_data[&amp;lsquo;users&amp;rsquo;]</code></pre>
 </div>
-
+</p>
 ]]></content>
   </entry>
   

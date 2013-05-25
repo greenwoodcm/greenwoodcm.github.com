@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>UITableViewCell from Nib - My Octopress Blog</title>
+  <title>RestKit POST with nested data - My Octopress Blog</title>
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content="As far as I can tell, this is the best and most correct way to create a custom UITableViewCell that has a backing Objective-C class (so custom &hellip;">
+  <meta name="description" content="">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://greenwoodcm.github.io/blog/2013/05/23/test-post">
+  <link rel="canonical" href="http://greenwoodcm.github.io/blog/2013/05/23/restkit-post">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
@@ -68,7 +68,7 @@
   
   <header>
     
-      <h1 class="entry-title">UITableViewCell From Nib</h1>
+      <h1 class="entry-title">RestKit POST With Nested Data</h1>
     
     
       <p class="meta">
@@ -84,47 +84,58 @@
   
 
 
-<time datetime="2013-05-23T14:38:00-04:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
+<time datetime="2013-05-23T00:00:00-04:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>As far as I can tell, this is the best and most correct way to create a custom UITableViewCell that has a backing Objective-C class (so custom subviews) and is layed out using a Nib.  If anyone knows of a better way to do it, let me know.  There&rsquo;s a bunch of conflicting information on the web.</p>
+<div class="entry-content"><p>I am using <a href="http://www.restkit.org">RestKit</a> to map objects in my iPhone application to RESTful requests to my <a href="http://flask.pocoo.org/">Flask</a> server.  I have to use RKRequestMapping to specify the format of the data a POST request expects.  This works fine when the data is flat, but I had trouble when there was an array of nested mappings that needed to be accounted for.  For example, here is the object that will be passed as data to the POST request:</p>
 
 <!-- more -->
 
 
-<ol>
-<li>Create your Nib</li>
-<li>Remove the default UIView from XIB, replace it with a UITableViewCell</li>
-<li>Create your UITableViewCell subclass in Objective-C</li>
-<li>Set the class of the cell in IB to be your custom class</li>
-<li>Manually write your UIOutlet properties for the custom view properties you want to access from the cell.</li>
-<li>Add sub-views in IB that correspond to those outlets</li>
-<li>Select the cell and open the right menu, right tab (Connections inspector).  There you should see the custom outlets you just coded up in the Outlets list</li>
-<li>Select the handle to the right of each outlet and drag it over to the subview in IB that corresponds to that outlet</li>
-<li>Finally, in your <code>tableView:cellForRowAtIndexPath:</code> method, instantiate the cell</li>
-</ol>
 
-
-<p>The cell needs to be instantiated using the Nib to display your custom layout:</p>
 
 <div>
-  <pre><code class='c'>...
-NSString *ident = @&quot;customCell&quot;;
-CustomTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ident];
+  <pre><code class='objective-c'>interface TestArgs : NSObject
 
-if(!cell)
-{
-    NSArray *tlobjs = [[NSBundle mainBundle] loadNibNamed:@&quot;CustomTableViewCell&quot; owner:nil options:nil];
-    cell = (CustomTableViewCell*)[tlobjs objectAtIndex:0];
-}
-...</code></pre>
+property (copy, nonatomic) NSString *name;
+property (strong, nonatomic) NSArray *users;
+
+end</code></pre>
 </div>
 
 
+<p>The users array is an array of dictionaries, each containing the keys {&lsquo;id&rsquo;, &lsquo;type&rsquo;}.  What I expected to see on the Flask end in the <code>request.form</code> variable was:</p>
+
+<div>
+  <pre><code class='python'>{'name': 'theName', 'users': [{'id':1, 'type':'user'},{'id':2,'type':'admin'}]}</code></pre>
+</div>
+
+
+<p>What I actually got was:</p>
+
+<div>
+  <pre><code class='python'>{'name': 'theName', 'users[][&quot;id&quot;]': 1, 'users[][&quot;id&quot;]': 2, 'users[][&quot;type&quot;]': 'user', 'users[][&quot;type&quot;]': 'admin'}</code></pre>
+</div>
+
+
+<p>Not very helpful.  The reason this happens is that form data is generally encoded in URL encoding, not JSON encoding.  URL encoding doesn&rsquo;t handle array values very well, so I needed to use JSON encoding to capture the nested information I wanted to send.  Took me a while, but as it turns out I had to change two things in my code to make this work.  First, on the client side, I had to change the serialization type that RestKit uses to serialize POST data:</p>
+
+<div>
+  <pre><code class='objective-c'>RKObjectManager *objectManager = ...
+[objectManager setRequestSerializationMIMEType:RKMIMETypeJSON];</code></pre>
+</div>
+
+
+<p>Second, on the server side, I had to access the JSON data that was submitted with the POST differently:</p>
+
+<div>
+  <pre><code class='python'>post_data = request.json
+user_array = post_data['users']</code></pre>
+</div>
 
 </div>
 
@@ -148,7 +159,7 @@ if(!cell)
   
 
 
-<time datetime="2013-05-23T14:38:00-04:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
+<time datetime="2013-05-23T00:00:00-04:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
       
 
 <span class="categories">
@@ -162,7 +173,7 @@ if(!cell)
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://greenwoodcm.github.io/blog/2013/05/23/test-post/" data-via="" data-counturl="http://greenwoodcm.github.io/blog/2013/05/23/test-post/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://greenwoodcm.github.io/blog/2013/05/23/restkit-post/" data-via="" data-counturl="http://greenwoodcm.github.io/blog/2013/05/23/restkit-post/" >Tweet</a>
   
   
   
@@ -171,8 +182,8 @@ if(!cell)
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/23/restkit-post/" title="Previous Post: RestKit POST with nested data">&laquo; RestKit POST with nested data</a>
       
+        <a class="basic-alignment right" href="/blog/2013/05/23/test-post/" title="Next Post: UITableViewCell from Nib">UITableViewCell from Nib &raquo;</a>
       
     </p>
   </footer>
