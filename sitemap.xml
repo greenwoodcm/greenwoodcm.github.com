@@ -1,23 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://greenwoodcm.github.io/blog/2013/05/23/restkit-post/</loc>
+        <loc>http://cmgreenwood.com/blog/2013/05/23/restkit-post/</loc>
         <lastmod>2013-05-24T22:51:25-04:00</lastmod>
     </url>
     <url>
-        <loc>http://greenwoodcm.github.io/blog/2013/05/23/test-post/</loc>
+        <loc>http://cmgreenwood.com/blog/2013/05/23/test-post/</loc>
         <lastmod>2013-05-24T22:48:27-04:00</lastmod>
     </url>
     <url>
-        <loc>http://greenwoodcm.github.io/blog/archives/</loc>
+        <loc>http://cmgreenwood.com/blog/archives/</loc>
         <lastmod>2013-05-24T22:51:25-04:00</lastmod>
     </url>
     <url>
-        <loc>http://greenwoodcm.github.io/</loc>
+        <loc>http://cmgreenwood.com/</loc>
         <lastmod>2013-05-24T22:51:25-04:00</lastmod>
     </url>
     <url>
-        <loc>http://greenwoodcm.github.io/robots.txt</loc>
+        <loc>http://cmgreenwood.com/robots.txt</loc>
         <lastmod>2013-05-23T14:30:09-04:00</lastmod>
     </url>
 </urlset>

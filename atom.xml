@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Chris Greenwood]]></title>
-  <link href="http://greenwoodcm.github.io/atom.xml" rel="self"/>
-  <link href="http://greenwoodcm.github.io/"/>
-  <updated>2013-05-24T23:01:15-04:00</updated>
-  <id>http://greenwoodcm.github.io/</id>
+  <link href="http://cmgreenwood.com/atom.xml" rel="self"/>
+  <link href="http://cmgreenwood.com/"/>
+  <updated>2013-05-24T23:02:45-04:00</updated>
+  <id>http://cmgreenwood.com/</id>
   <author>
     <name><![CDATA[Chris Greenwood]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[UITableViewCell from Nib]]></title>
-    <link href="http://greenwoodcm.github.io/blog/2013/05/23/test-post/"/>
+    <link href="http://cmgreenwood.com/blog/2013/05/23/test-post/"/>
     <updated>2013-05-23T14:38:00-04:00</updated>
-    <id>http://greenwoodcm.github.io/blog/2013/05/23/test-post</id>
+    <id>http://cmgreenwood.com/blog/2013/05/23/test-post</id>
     <content type="html"><![CDATA[<p>As far as I can tell, this is the best and most correct way to create a custom UITableViewCell that has a backing Objective-C class (so custom subviews) and is layed out using a Nib.  If anyone knows of a better way to do it, let me know.  There&rsquo;s a bunch of conflicting information on the web.</p>
 
 <!-- more -->
@@ -58,9 +58,9 @@ if(!cell)
   
   <entry>
     <title type="html"><![CDATA[RestKit POST with nested data]]></title>
-    <link href="http://greenwoodcm.github.io/blog/2013/05/23/restkit-post/"/>
+    <link href="http://cmgreenwood.com/blog/2013/05/23/restkit-post/"/>
     <updated>2013-05-23T00:00:00-04:00</updated>
-    <id>http://greenwoodcm.github.io/blog/2013/05/23/restkit-post</id>
+    <id>http://cmgreenwood.com/blog/2013/05/23/restkit-post</id>
     <content type="html"><![CDATA[<p>I am using <a href="http://www.restkit.org">RestKit</a> to map objects in my iPhone application to RESTful requests to my <a href="http://flask.pocoo.org/">Flask</a> server.  I have to use RKRequestMapping to specify the format of the data a POST request expects.  This works fine when the data is flat, but I had trouble when there was an array of nested mappings that needed to be accounted for.  For example, here is the object that will be passed as data to the POST request:</p>
 
 <!-- more -->
