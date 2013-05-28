@@ -100,14 +100,19 @@
 
 
 
-<div>
-  <pre><code class='objective-c'>interface TestArgs : NSObject
-
-property (copy, nonatomic) NSString *name;
-property (strong, nonatomic) NSArray *users;
-
-end</code></pre>
-</div>
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">TestArgs</span> : <span class="nc">NSObject</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSArray</span> <span class="o">*</span><span class="n">users</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>The users array is an array of dictionaries, each containing the keys {&lsquo;id&rsquo;, &lsquo;type&rsquo;}.  What I expected to see on the Flask end in the <code>request.form</code> variable was:</p>
@@ -119,25 +124,27 @@ end</code></pre>
 
 <p>What I actually got was:</p>
 
-<div>
-  <pre><code class='python'>{'name': 'theName', 'users[][&quot;id&quot;]': 1, 'users[][&quot;id&quot;]': 2, 'users[][&quot;type&quot;]': 'user', 'users[][&quot;type&quot;]': 'admin'}</code></pre>
-</div>
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;theName&#39;</span><span class="p">,</span> <span class="s">&#39;users[][&quot;id&quot;]&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;users[][&quot;id&quot;]&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;users[][&quot;type&quot;]&#39;</span><span class="p">:</span> <span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;users[][&quot;type&quot;]&#39;</span><span class="p">:</span> <span class="s">&#39;admin&#39;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Not very helpful.  The reason this happens is that form data is generally encoded in URL encoding, not JSON encoding.  URL encoding doesn&rsquo;t handle array values very well, so I needed to use JSON encoding to capture the nested information I wanted to send.  Took me a while, but as it turns out I had to change two things in my code to make this work.  First, on the client side, I had to change the serialization type that RestKit uses to serialize POST data:</p>
 
-<div>
-  <pre><code class='objective-c'>RKObjectManager *objectManager = ...
-[objectManager setRequestSerializationMIMEType:RKMIMETypeJSON];</code></pre>
-</div>
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">RKObjectManager</span> <span class="o">*</span><span class="n">objectManager</span> <span class="o">=</span> <span class="p">...</span>
+</span><span class='line'><span class="p">[</span><span class="n">objectManager</span> <span class="nl">setRequestSerializationMIMEType:</span><span class="n">RKMIMETypeJSON</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Second, on the server side, I had to access the JSON data that was submitted with the POST differently:</p>
 
-<div>
-  <pre><code class='python'>post_data = request.json
-user_array = post_data['users']</code></pre>
-</div>
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">post_data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span>
+</span><span class='line'><span class="n">user_array</span> <span class="o">=</span> <span class="n">post_data</span><span class="p">[</span><span class="s">&#39;users&#39;</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
@@ -147,7 +154,7 @@ user_array = post_data['users']</code></pre>
       
   
 
-<span class="byline author vcard">Posted by <span class="fn">{"name"=>"Chris Greenwood", "email"=>"greenwoodcm@gmail.com"}</span></span>
+<span class="byline author vcard">Posted by <a href="mailto:greenwoodcm@gmail.com"><span class="fn">Chris Greenwood</span></a></span>
 
       
 
@@ -198,6 +205,10 @@ user_array = post_data['users']</code></pre>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/">Radio Buttons With Bootstrap and Knockout</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/05/23/test-post/">UITableViewCell From Nib</a>

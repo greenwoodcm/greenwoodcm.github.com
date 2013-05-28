@@ -1,0 +1,313 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Radio buttons with Bootstrap and Knockout - Chris Greenwood</title>
+  <meta name="author" content="{"name"=>"Chris Greenwood", "email"=>"greenwoodcm@gmail.com"}">
+
+  
+  <meta name="description" content="I&rsquo;m currently building a web app using Knockout.js as a frontend framework, with Bootstrap as my CSS framework. I wanted to create a button &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Chris Greenwood" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<link href="bootstrap/css/bootstrap-uva2.min.js" type="text/css">
+<link href="bootstrap/css/bootstrap-responsive.min.js" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Chris Greenwood</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:cmgreenwood.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Radio Buttons With Bootstrap and Knockout</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-28T15:16:00-04:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&rsquo;m currently building a web app using <a href="http://knockoutjs.com/">Knockout.js</a> as a frontend framework, with Bootstrap as my CSS framework.  I wanted to create a button group in which only a single button at a time could be selected (a set of <em>radio buttons</em>).  I then wanted to detect when those buttons change value, and which value is subsequently selected.</p>
+
+<p>There are a variety of ways to go about this.  You could solve this using jQuery events, Bootstrap-specific events, or within the Knockout framework.  I decided to do it using a Knockout <code>click</code> binding so that once the event does fire, I&rsquo;m right where I need to be to update my ViewModel, and possibly my backend.</p>
+
+<!-- more -->
+
+
+<p>Here&rsquo;s what the HTML looks like:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;radio&quot;</span> <span class="na">class=</span><span class="s">&quot;btn-group&quot;</span> <span class="na">data-toggle=</span><span class="s">&quot;buttons-radio&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">class=</span><span class="s">&quot;btn active&quot;</span> <span class="na">data-bind=</span><span class="s">&quot;click: $root.updateReadPreferences&quot;</span> <span class="na">value=</span><span class="s">&quot;all&quot;</span><span class="nt">&gt;</span>All<span class="nt">&lt;/button&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">class=</span><span class="s">&quot;btn&quot;</span> <span class="na">data-bind=</span><span class="s">&quot;click: $root.updateReadPreferences&quot;</span> <span class="na">value=</span><span class="s">&quot;unread&quot;</span><span class="nt">&gt;</span>Unread<span class="nt">&lt;/button&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And then the JS in my ViewModel:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">FeedsViewModel</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">self</span><span class="p">.</span><span class="nx">readPreferences</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">self</span><span class="p">.</span><span class="nx">updateReadPreferences</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">koElem</span><span class="p">,</span> <span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">self</span><span class="p">.</span><span class="nx">readPreferences</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Unread or all? : &#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A Knockout event takes the Knockout view object that is in scope for the DOM element as its first parameter &ndash; in our case it is the FeedsViewModel.  The second parameter, if provided, is the HTML DOM element that gave rise to the event trigger.  We simply have to use jQuery to ask for the &ldquo;value&rdquo; attribute for the DOM element, and then update our ViewModel accordingly.  One downside of this approach is that it is fairly verbose &ndash; we need a <code>value</code> attribute and a <code>click</code> event declared for each button in the button group.  Another way to do it might be to add the <code>click</code> event to the button group div instead of each button, but then you have to iterate through the children of the button group checking for the button that has the CSS class <code>active</code>.  This creates a race condition between the Knockout event being triggered and Bootstrap updating the CSS.  Since button groups will generally only contain a handful of elements, I found it easiest to just declare the <code>click</code> events at the button level.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <a href="mailto:greenwoodcm@gmail.com"><span class="fn">Chris Greenwood</span></a></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-28T15:16:00-04:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/snippet/'>snippet</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/" data-via="chrismgreenwood" data-counturl="http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/05/23/test-post/" title="Previous Post: UITableViewCell from Nib">&laquo; UITableViewCell from Nib</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/">Radio Buttons With Bootstrap and Knockout</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/23/test-post/">UITableViewCell From Nib</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/23/restkit-post/">RestKit POST With Nested Data</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/greenwoodcm">@greenwoodcm</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'greenwoodcm',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - {"name"=>"Chris Greenwood", "email"=>"greenwoodcm@gmail.com"} -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'chrisgreenwood';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/';
+        var disqus_url = 'http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

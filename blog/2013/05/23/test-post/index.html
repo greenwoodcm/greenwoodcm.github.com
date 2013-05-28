@@ -113,18 +113,27 @@
 
 <p>The cell needs to be instantiated using the Nib to display your custom layout:</p>
 
-<div>
-  <pre><code class='c'>...
-NSString *ident = @&quot;customCell&quot;;
-CustomTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ident];
-
-if(!cell)
-{
-    NSArray *tlobjs = [[NSBundle mainBundle] loadNibNamed:@&quot;CustomTableViewCell&quot; owner:nil options:nil];
-    cell = (CustomTableViewCell*)[tlobjs objectAtIndex:0];
-}
-...</code></pre>
-</div>
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">ident</span> <span class="o">=</span> <span class="s">@&quot;customCell&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="n">CustomTableViewCell</span> <span class="o">*</span><span class="n">cell</span> <span class="o">=</span> <span class="p">[</span><span class="n">tableView</span> <span class="nl">dequeueReusableCellWithIdentifier:</span><span class="n">ident</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">cell</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">NSArray</span> <span class="o">*</span><span class="n">tlobjs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSBundle</span> <span class="n">mainBundle</span><span class="p">]</span> <span class="nl">loadNibNamed:</span><span class="s">@&quot;CustomTableViewCell&quot;</span> <span class="nl">owner:</span><span class="nb">nil</span> <span class="nl">options:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">cell</span> <span class="o">=</span> <span class="p">(</span><span class="n">CustomTableViewCell</span><span class="o">*</span><span class="p">)[</span><span class="n">tlobjs</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 
@@ -136,7 +145,7 @@ if(!cell)
       
   
 
-<span class="byline author vcard">Posted by <span class="fn">{"name"=>"Chris Greenwood", "email"=>"greenwoodcm@gmail.com"}</span></span>
+<span class="byline author vcard">Posted by <a href="mailto:greenwoodcm@gmail.com"><span class="fn">Chris Greenwood</span></a></span>
 
       
 
@@ -176,6 +185,8 @@ if(!cell)
         <a class="basic-alignment left" href="/blog/2013/05/23/restkit-post/" title="Previous Post: RestKit POST with nested data">&laquo; RestKit POST with nested data</a>
       
       
+        <a class="basic-alignment right" href="/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/" title="Next Post: Radio buttons with Bootstrap and Knockout">Radio buttons with Bootstrap and Knockout &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -193,6 +204,10 @@ if(!cell)
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/">Radio Buttons With Bootstrap and Knockout</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/05/23/test-post/">UITableViewCell From Nib</a>
