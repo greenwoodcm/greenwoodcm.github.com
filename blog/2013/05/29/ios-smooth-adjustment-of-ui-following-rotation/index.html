@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>UITableViewCell from Nib - Chris Greenwood</title>
+  <title>iOS: Smooth Adjustment of UI Following Rotation - Chris Greenwood</title>
   <meta name="author" content="{"name"=>"Chris Greenwood", "email"=>"greenwoodcm@gmail.com"}">
 
   
-  <meta name="description" content="As far as I can tell, this is the best and most correct way to create a custom UITableViewCell that has a backing Objective-C class (so custom &hellip;">
+  <meta name="description" content="Today I came across a small issue when trying to adjust a UIView based on rotation of the device. The UINavigationController has two main delegate &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://cmgreenwood.com/blog/2013/05/23/test-post">
+  <link rel="canonical" href="http://cmgreenwood.com/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Chris Greenwood" type="application/atom+xml">
@@ -70,7 +70,7 @@
   
   <header>
     
-      <h1 class="entry-title">UITableViewCell From Nib</h1>
+      <h1 class="entry-title">iOS: Smooth Adjustment of UI Following Rotation</h1>
     
     
       <p class="meta">
@@ -86,57 +86,21 @@
   
 
 
-<time datetime="2013-05-23T14:38:00-04:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
+<time datetime="2013-05-29T13:44:00-04:00" pubdate data-updated="true">May 29<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>As far as I can tell, this is the best and most correct way to create a custom UITableViewCell that has a backing Objective-C class (so custom subviews) and is layed out using a Nib.  If anyone knows of a better way to do it, let me know.  There&rsquo;s a bunch of conflicting information on the web.</p>
+<div class="entry-content"><p>Today I came across a small issue when trying to adjust a UIView based on rotation of the device.  The UINavigationController has two main delegate methods that pertain to rotation of the device: <code>willRotateToInterfaceOrientation:duration:</code> and <code>didRotateFromInterfaceOrientation:</code>.  They are pretty self-explanatory.  The former is called when the view is about to rotate, and provides the destination rotation.  The latter is called when the view rotation animation is over.</p>
+
+<p>The problem I have is that I want to wait until the rotation is over so that I can query the UIViewController&rsquo;s view for its size and then update subviews accordingly.  But if we wait until the <code>didRotateFromInterfaceOrientation:</code> method is called, the entire rotation animation is over and then all my views update &ndash; it&rsquo;s pretty jerky.  But if I perform my view manipulation in the <code>willRotate...</code> method, the view controller&rsquo;s view has not been assigned its new view container yet, so I don&rsquo;t know what the new size of the view is.</p>
 
 <!-- more -->
 
 
-<ol>
-<li>Create your Nib</li>
-<li>Remove the default UIView from XIB, replace it with a UITableViewCell</li>
-<li>Create your UITableViewCell subclass in Objective-C</li>
-<li>Set the class of the cell in IB to be your custom class</li>
-<li>Manually write your UIOutlet properties for the custom view properties you want to access from the cell.</li>
-<li>Add sub-views in IB that correspond to those outlets</li>
-<li>Select the cell and open the right menu, right tab (Connections inspector).  There you should see the custom outlets you just coded up in the Outlets list</li>
-<li>Select the handle to the right of each outlet and drag it over to the subview in IB that corresponds to that outlet</li>
-<li>Finally, in your <code>tableView:cellForRowAtIndexPath:</code> method, instantiate the cell</li>
-</ol>
-
-
-<p>The cell needs to be instantiated using the Nib to display your custom layout:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">ident</span> <span class="o">=</span> <span class="s">@&quot;customCell&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="n">CustomTableViewCell</span> <span class="o">*</span><span class="n">cell</span> <span class="o">=</span> <span class="p">[</span><span class="n">tableView</span> <span class="nl">dequeueReusableCellWithIdentifier:</span><span class="n">ident</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">cell</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="n">NSArray</span> <span class="o">*</span><span class="n">tlobjs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSBundle</span> <span class="n">mainBundle</span><span class="p">]</span> <span class="nl">loadNibNamed:</span><span class="s">@&quot;CustomTableViewCell&quot;</span> <span class="nl">owner:</span><span class="nb">nil</span> <span class="nl">options:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'>  <span class="n">cell</span> <span class="o">=</span> <span class="p">(</span><span class="n">CustomTableViewCell</span><span class="o">*</span><span class="p">)[</span><span class="n">tlobjs</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="p">...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
+<p>I originally thought there might be a function that allows me to ask the view controller what its size will be for a particular rotation, but I couldn&rsquo;t find this anywhere in the docs.  As it turns out, there is a third delegate method that does exactly what I want.  According to <a href="http://stackoverflow.com/a/4432980/1560633">this Stack Overflow response</a>, when the <code>willAnimateRotationToInterfaceOrientation:duration:</code> method is called, the view controller&rsquo;s view has already been assigned its destination view container and the animation is about to start.  If I perform my view manipulation then, I know what the view size is about to be, and any changes I make occur at the same time as the actual rotation of the view.  It is a small and easy modification, but makes a big difference.</p>
 </div>
 
 
@@ -159,7 +123,7 @@
   
 
 
-<time datetime="2013-05-23T14:38:00-04:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
+<time datetime="2013-05-29T13:44:00-04:00" pubdate data-updated="true">May 29<span>th</span>, 2013</time>
       
 
 <span class="categories">
@@ -173,7 +137,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://cmgreenwood.com/blog/2013/05/23/test-post/" data-via="chrismgreenwood" data-counturl="http://cmgreenwood.com/blog/2013/05/23/test-post/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://cmgreenwood.com/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation/" data-via="chrismgreenwood" data-counturl="http://cmgreenwood.com/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation/" >Tweet</a>
   
   
   
@@ -182,10 +146,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/23/restkit-post/" title="Previous Post: RestKit POST with nested data">&laquo; RestKit POST with nested data</a>
+        <a class="basic-alignment left" href="/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/" title="Previous Post: Radio buttons with Bootstrap and Knockout">&laquo; Radio buttons with Bootstrap and Knockout</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/" title="Next Post: Radio buttons with Bootstrap and Knockout">Radio buttons with Bootstrap and Knockout &raquo;</a>
       
     </p>
   </footer>
@@ -276,8 +238,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://cmgreenwood.com/blog/2013/05/23/test-post/';
-        var disqus_url = 'http://cmgreenwood.com/blog/2013/05/23/test-post/';
+        var disqus_identifier = 'http://cmgreenwood.com/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation/';
+        var disqus_url = 'http://cmgreenwood.com/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation/';
         var disqus_script = 'embed.js';
       
     (function () {

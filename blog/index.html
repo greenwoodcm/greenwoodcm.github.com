@@ -9,7 +9,7 @@
   <meta name="author" content="{"name"=>"Chris Greenwood", "email"=>"greenwoodcm@gmail.com"}">
 
   
-  <meta name="description" content="I&rsquo;m currently building a web app using Knockout.js as a frontend framework, with Bootstrap as my CSS framework. I wanted to create a button &hellip;">
+  <meta name="description" content="Today I came across a small issue when trying to adjust a UIView based on rotation of the device. The UINavigationController has two main delegate &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation/">iOS: Smooth Adjustment of UI Following Rotation</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-29T13:44:00-04:00" pubdate data-updated="true">May 29<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Today I came across a small issue when trying to adjust a UIView based on rotation of the device.  The UINavigationController has two main delegate methods that pertain to rotation of the device: <code>willRotateToInterfaceOrientation:duration:</code> and <code>didRotateFromInterfaceOrientation:</code>.  They are pretty self-explanatory.  The former is called when the view is about to rotate, and provides the destination rotation.  The latter is called when the view rotation animation is over.</p>
+
+<p>The problem I have is that I want to wait until the rotation is over so that I can query the UIViewController&rsquo;s view for its size and then update subviews accordingly.  But if we wait until the <code>didRotateFromInterfaceOrientation:</code> method is called, the entire rotation animation is over and then all my views update &ndash; it&rsquo;s pretty jerky.  But if I perform my view manipulation in the <code>willRotate...</code> method, the view controller&rsquo;s view has not been assigned its new view container yet, so I don&rsquo;t know what the new size of the view is.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -204,6 +247,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation/">iOS: Smooth Adjustment of UI Following Rotation</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/">Radio Buttons With Bootstrap and Knockout</a>

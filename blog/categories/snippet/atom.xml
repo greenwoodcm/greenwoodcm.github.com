@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snippet | Chris Greenwood]]></title>
   <link href="http://cmgreenwood.com/blog/categories/snippet/atom.xml" rel="self"/>
   <link href="http://cmgreenwood.com/"/>
-  <updated>2013-05-28T15:43:54-04:00</updated>
+  <updated>2013-05-29T13:58:44-04:00</updated>
   <id>http://cmgreenwood.com/</id>
   <author>
     <name><![CDATA[{"name"=>"Chris Greenwood", "email"=>"greenwoodcm@gmail.com"}]]></name>
@@ -12,6 +12,22 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS: Smooth Adjustment of UI Following Rotation]]></title>
+    <link href="http://cmgreenwood.com/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation/"/>
+    <updated>2013-05-29T13:44:00-04:00</updated>
+    <id>http://cmgreenwood.com/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation</id>
+    <content type="html"><![CDATA[<p>Today I came across a small issue when trying to adjust a UIView based on rotation of the device.  The UINavigationController has two main delegate methods that pertain to rotation of the device: <code>willRotateToInterfaceOrientation:duration:</code> and <code>didRotateFromInterfaceOrientation:</code>.  They are pretty self-explanatory.  The former is called when the view is about to rotate, and provides the destination rotation.  The latter is called when the view rotation animation is over.</p>
+
+<p>The problem I have is that I want to wait until the rotation is over so that I can query the UIViewController&rsquo;s view for its size and then update subviews accordingly.  But if we wait until the <code>didRotateFromInterfaceOrientation:</code> method is called, the entire rotation animation is over and then all my views update &ndash; it&rsquo;s pretty jerky.  But if I perform my view manipulation in the <code>willRotate...</code> method, the view controller&rsquo;s view has not been assigned its new view container yet, so I don&rsquo;t know what the new size of the view is.</p>
+
+<!-- more -->
+
+
+<p>I originally thought there might be a function that allows me to ask the view controller what its size will be for a particular rotation, but I couldn&rsquo;t find this anywhere in the docs.  As it turns out, there is a third delegate method that does exactly what I want.  According to <a href="http://stackoverflow.com/a/4432980/1560633">this Stack Overflow response</a>, when the <code>willAnimateRotationToInterfaceOrientation:duration:</code> method is called, the view controller&rsquo;s view has already been assigned its destination view container and the animation is about to start.  If I perform my view manipulation then, I know what the view size is about to be, and any changes I make occur at the same time as the actual rotation of the view.  It is a small and easy modification, but makes a big difference.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Radio buttons with Bootstrap and Knockout]]></title>
