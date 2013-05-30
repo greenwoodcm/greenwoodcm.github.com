@@ -1,99 +1,79 @@
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<!DOCTYPE HTML>
+<html>
 <head>
-  <meta charset="utf-8">
-  <title>Radio buttons with Bootstrap and Knockout - Chris Greenwood</title>
-  <meta name="author" content="{"name"=>"Chris Greenwood", "email"=>"greenwoodcm@gmail.com"}">
+	<meta charset="utf-8">
+	<title>Radio buttons with Bootstrap and Knockout - Chris Greenwood</title>
+	<meta name="author" content="Chris Greenwood">
 
-  
-  <meta name="description" content="I&rsquo;m currently building a web app using Knockout.js as a frontend framework, with Bootstrap as my CSS framework. I wanted to create a button &hellip;">
-  
+	
+	<meta name="description" content="Radio Buttons With Bootstrap and Knockout I&rsquo;m currently building a web app using Knockout.js as a frontend framework, with Bootstrap as my CSS &hellip;">
+	
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  
-  <link rel="canonical" href="http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="Chris Greenwood" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-<link href="bootstrap/css/bootstrap-uva2.min.js" type="text/css">
-<link href="bootstrap/css/bootstrap-responsive.min.js" type="text/css">
-
-  
-
+	<link href="/atom.xml" rel="alternate" title="Chris Greenwood" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+	
 </head>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Chris Greenwood</a></h1>
-  
-</hgroup>
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:cmgreenwood.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Home</a></li>
-  <li><a href="/blog">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">	
+	<a href="/"><img src='/images/me2.jpeg' alt='Profile Picture' style='width: 160px;' /></a>
+</div>
 
+<p class="title">Chris Greenwood</p>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
 </nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
-    
-      <h1 class="entry-title">Radio Buttons With Bootstrap and Knockout</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T15:16:00-04:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-<div class="entry-content"><p>I&rsquo;m currently building a web app using <a href="http://knockoutjs.com/">Knockout.js</a> as a frontend framework, with Bootstrap as my CSS framework.  I wanted to create a button group in which only a single button at a time could be selected (a set of <em>radio buttons</em>).  I then wanted to detect when those buttons change value, and which value is subsequently selected.</p>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/chrismgreenwood" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/greenwoodcm" title="GitHub">GitHub</a>
+		
+		
+		
+		<a class="linkedin" href="http://www.linkedin.com/in/greenwoodcm">LinkedIn</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Radio Buttons With Bootstrap and Knockout</h1>
+	<div class="entry-content" itemprop="articleBody"><p>I&rsquo;m currently building a web app using <a href="http://knockoutjs.com/">Knockout.js</a> as a frontend framework, with Bootstrap as my CSS framework.  I wanted to create a button group in which only a single button at a time could be selected (a set of <em>radio buttons</em>).  I then wanted to detect when those buttons change value, and which value is subsequently selected.</p>
 
 <p>There are a variety of ways to go about this.  You could solve this using jQuery events, Bootstrap-specific events, or within the Knockout framework.  I decided to do it using a Knockout <code>click</code> binding so that once the event does fire, I&rsquo;m right where I need to be to update my ViewModel, and possibly my backend.</p>
 
@@ -147,137 +127,45 @@
 <p>A Knockout event takes the Knockout view object that is in scope for the DOM element as its first parameter &ndash; in our case it is the FeedsViewModel.  The second parameter, if provided, is the HTML DOM element that gave rise to the event trigger.  We simply have to use jQuery to ask for the &ldquo;value&rdquo; attribute for the DOM element, and then update our ViewModel accordingly.  One downside of this approach is that it is fairly verbose &ndash; we need a <code>value</code> attribute and a <code>click</code> event declared for each button in the button group.  Another way to do it might be to add the <code>click</code> event to the button group div instead of each button, but then you have to iterate through the children of the button group checking for the button that has the CSS class <code>active</code>.  This creates a race condition between the Knockout event being triggered and Bootstrap updating the CSS.  Since button groups will generally only contain a handful of elements, I found it easiest to just declare the <code>click</code> events at the button level.</p>
 </div>
 
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <a href="mailto:greenwoodcm@gmail.com"><span class="fn">Chris Greenwood</span></a></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T15:16:00-04:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/snippet/'>snippet</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/" data-via="chrismgreenwood" data-counturl="http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/" >Tweet</a>
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/05/23/test-post/" title="Previous Post: UITableViewCell from Nib">&laquo; UITableViewCell from Nib</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation/" title="Next Post: iOS: Smooth Adjustment of UI Following Rotation">iOS: Smooth Adjustment of UI Following Rotation &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
-  <section>
-    <h1>Comments</h1>
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
     <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-  </section>
-
+</section>
 </div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2013
 
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation/">iOS: Smooth Adjustment of UI Following Rotation</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/">Radio Buttons With Bootstrap and Knockout</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/05/23/test-post/">UITableViewCell From Nib</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/05/23/restkit-post/">RestKit POST With Nested Data</a>
-      </li>
-    
-  </ul>
-</section>
+    Chris Greenwood
 
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
-  </ul>
-  
-  <a href="https://github.com/greenwoodcm">@greenwoodcm</a> on GitHub
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
+<br>
+Powered by Octopress.
 
-        github.showRepos({
-            user: 'greenwoodcm',
-            count: 3,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
 
-
-
-
-
-  
-</aside>
-
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - {"name"=>"Chris Greenwood", "email"=>"greenwoodcm@gmail.com"} -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
 
 <script type="text/javascript">
       var disqus_shortname = 'chrisgreenwood';
@@ -299,21 +187,7 @@
 
 
 
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
+		</div>
+	</div>
 </body>
 </html>
