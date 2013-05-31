@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snippet | Chris Greenwood]]></title>
   <link href="http://cmgreenwood.com/blog/categories/snippet/atom.xml" rel="self"/>
   <link href="http://cmgreenwood.com/"/>
-  <updated>2013-05-30T00:43:43-04:00</updated>
+  <updated>2013-05-31T09:37:42-04:00</updated>
   <id>http://cmgreenwood.com/</id>
   <author>
     <name><![CDATA[Chris Greenwood]]></name>
@@ -116,6 +116,7 @@
 <ol>
 <li>Create your Nib</li>
 <li>Remove the default UIView from XIB, replace it with a UITableViewCell</li>
+<li><strong>Update:</strong> Remember to set a reuse identifier in the NIB properties.  It cannot be set programmatically.</li>
 <li>Create your UITableViewCell subclass in Objective-C</li>
 <li>Set the class of the cell in IB to be your custom class</li>
 <li>Manually write your UIOutlet properties for the custom view properties you want to access from the cell.</li>
