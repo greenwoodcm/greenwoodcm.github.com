@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snippet | Chris Greenwood]]></title>
   <link href="http://cmgreenwood.com/blog/categories/snippet/atom.xml" rel="self"/>
   <link href="http://cmgreenwood.com/"/>
-  <updated>2013-06-05T00:16:16-04:00</updated>
+  <updated>2013-09-27T23:57:44-07:00</updated>
   <id>http://cmgreenwood.com/</id>
   <author>
     <name><![CDATA[Chris Greenwood]]></name>
@@ -14,9 +14,106 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Aliasing when creating EPS files in Matlab]]></title>
+    <link href="http://cmgreenwood.com/blog/2013/09/27/aliasing-in-eps-files/"/>
+    <updated>2013-09-27T23:20:00-07:00</updated>
+    <id>http://cmgreenwood.com/blog/2013/09/27/aliasing-in-eps-files</id>
+    <content type="html"><![CDATA[<p>I have been working in LaTeX for a paper I&rsquo;m writing, and have found that if you want to include Matlab graphs in a LaTeX document, EPS files are by far the best way to go.  EPS files are converted to PDF graphics and then included in the resulting PDF, which looks way better than plugging a JPEG or a PNG file in directly.</p>
+
+<p>However, I came across a weird issue when trying to save one of my graphs.  I used the <code>confusionmat</code> function in Matlab to create a confusion matrix from a set of ground truth and observation data pairs.  I then wrote a simple script to create a nice graphical representation of the confusion matrix (adapted from <a href="http://wrongpc.blogspot.com/2010/08/draw-confusion-matrix-in-matlab.html">here</a>).</p>
+
+<!-- more -->
+
+
+<p>The only problem was that when I tried to export as a EPS file, I got the following weird aliasing effect.</p>
+
+<p><img style="width:50%;" src="http://cmgreenwood.com/images/confusionmat_alias.png"></img></p>
+
+<p>I looked at a bunch of different options for fixing the issue: <a href="http://www.latex-community.org/forum/viewtopic.php?f=45&amp;p=53569">different LaTeX compiler settings</a>, <a href="http://stackoverflow.com/questions/6614207/how-to-export-non-blurry-eps-images">applying filters in Matlab</a>, <a href="http://pages.cs.wisc.edu/~ghost/">using GhostView as the viewer for the EPS file</a>.  None of it seemed to help.  I think at the end of the day, it didn&rsquo;t have to do with the EPS file itself, but the software/driver my Mac was using to view the EPS file and subsequently convert it to a PDF graphic.</p>
+
+<p>The solution that ended up working for me?  A surprisingly easy one.  I finally found that if I scaled the matrix itself up by a large factor before graphing into a Matlab figure, the aliasing effect was eliminated.  I had to change some of the logic that printed confusion matrix numbers themselves at the right position, but it was a surprisingly simple fix to a strange problem.  Full script below.</p>
+
+<pre><code>function [pcts] = confusion_plot(cmat, order)
+
+SCALE = 100;
+
+% turn into percentages
+totals = sum(cmat, 2);
+pcts = zeros(size(cmat));
+for i = 1:size(cmat, 1)
+    for j = 1:size(cmat, 2)
+        point = cmat(i,j);
+        total = totals(i);
+        pcts(i,j) = point / total;
+    end
+end
+
+% flip so that the darks are high percents
+pcts_flipped = 1 - pcts;
+
+pcts_scaled = scale_matrix(pcts_flipped, SCALE);
+
+imagesc(pcts_scaled);
+colormap(gray);
+
+set(gca,'FontSize',20);
+set(gca,'XTick',SCALE/2+1/2:SCALE:SCALE*length(order)-SCALE/2);
+set(gca,'YTick',SCALE/2+1/2:SCALE:SCALE*length(order)-SCALE/2);
+set(gca,'XTickLabel',order);
+set(gca,'YTickLabel',order);
+set(gca, 'Ticklength', [0 0])
+set(gca,'XAxisLocation','top');
+ylabel('Ground Truth Object Count');
+xlabel('Observed Object Count');
+
+% show the text percentage values
+for i = 1:size(pcts, 1)
+    for j = 1:size(pcts, 2)
+
+        pct = pcts(i,j);
+
+        color = [0 0 0];
+        if pct &gt; 0.6
+            color = [1 1 1];
+        end
+
+        text(j*SCALE-SCALE/2+1/2,i*SCALE-SCALE/2+1/2,num2str(cmat(i,j), 4), ...
+            'FontSize', 20, ...
+            'FontWeight', 'bold', ...
+            'HorizontalAlignment', 'center', ...
+            'Color', color);
+    end
+end
+
+end
+
+function [scaled] = scale_matrix(mat, scale)
+
+scaled = zeros(scale * size(mat));
+
+for i = 1:size(scaled, 1)
+    for j = 1:size(scaled, 2)
+        i_prime = ceil(i / scale);
+        j_prime = ceil(j / scale);
+        scaled(i, j) = mat(i_prime, j_prime);
+    end
+end
+
+end
+</code></pre>
+
+<p>Here&rsquo;s the resulting EPS file, with the aliasing pretty much eliminated.</p>
+
+<p><img style="width:50%;" src="http://cmgreenwood.com/images/confusionmat_nonalias.png"></img></p>
+
+<p>I&rsquo;m sure its not the most elegant way to solve the issue, but if you&rsquo;re looking for a simple way to minimize the odd aliasing effect caused by exporting Matlab figures to EPS files, give this approach a shot.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[iOS: Smooth Adjustment of UI Following Rotation]]></title>
     <link href="http://cmgreenwood.com/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation/"/>
-    <updated>2013-05-29T13:44:00-04:00</updated>
+    <updated>2013-05-29T13:44:00-07:00</updated>
     <id>http://cmgreenwood.com/blog/2013/05/29/ios-smooth-adjustment-of-ui-following-rotation</id>
     <content type="html"><![CDATA[<p>Today I came across a small issue when trying to adjust a UIView based on rotation of the device.  The UINavigationController has two main delegate methods that pertain to rotation of the device: <code>willRotateToInterfaceOrientation:duration:</code> and <code>didRotateFromInterfaceOrientation:</code>.  They are pretty self-explanatory.  The former is called when the view is about to rotate, and provides the destination rotation.  The latter is called when the view rotation animation is over.</p>
 
@@ -32,7 +129,7 @@
   <entry>
     <title type="html"><![CDATA[Radio buttons with Bootstrap and Knockout]]></title>
     <link href="http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/"/>
-    <updated>2013-05-28T15:16:00-04:00</updated>
+    <updated>2013-05-28T15:16:00-07:00</updated>
     <id>http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout</id>
     <content type="html"><![CDATA[<p>I&rsquo;m currently building a web app using <a href="http://knockoutjs.com/">Knockout.js</a> as a frontend framework, with Bootstrap as my CSS framework.  I wanted to create a button group in which only a single button at a time could be selected (a set of <em>radio buttons</em>).  I then wanted to detect when those buttons change value, and which value is subsequently selected.</p>
 
@@ -106,7 +203,7 @@
   <entry>
     <title type="html"><![CDATA[UITableViewCell from Nib]]></title>
     <link href="http://cmgreenwood.com/blog/2013/05/23/test-post/"/>
-    <updated>2013-05-23T14:38:00-04:00</updated>
+    <updated>2013-05-23T14:38:00-07:00</updated>
     <id>http://cmgreenwood.com/blog/2013/05/23/test-post</id>
     <content type="html"><![CDATA[<p>As far as I can tell, this is the best and most correct way to create a custom UITableViewCell that has a backing Objective-C class (so custom subviews) and is layed out using a Nib.  If anyone knows of a better way to do it, let me know.  There&rsquo;s a bunch of conflicting information on the web.</p>
 
@@ -162,7 +259,7 @@
   <entry>
     <title type="html"><![CDATA[RestKit POST with nested data]]></title>
     <link href="http://cmgreenwood.com/blog/2013/05/23/restkit-post/"/>
-    <updated>2013-05-23T00:00:00-04:00</updated>
+    <updated>2013-05-23T00:00:00-07:00</updated>
     <id>http://cmgreenwood.com/blog/2013/05/23/restkit-post</id>
     <content type="html"><![CDATA[<p>I am using <a href="http://www.restkit.org">RestKit</a> to map objects in my iPhone application to RESTful requests to my <a href="http://flask.pocoo.org/">Flask</a> server.  I have to use RKRequestMapping to specify the format of the data a POST request expects.  This works fine when the data is flat, but I had trouble when there was an array of nested mappings that needed to be accounted for.  For example, here is the object that will be passed as data to the POST request:</p>
 
