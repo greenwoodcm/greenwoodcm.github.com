@@ -13,6 +13,7 @@ As far as I can tell, this is the best and most correct way to create a custom U
 
 1.	Create your Nib
 2.	Remove the default UIView from XIB, replace it with a UITableViewCell
+3.	**Update:** Remember to set a reuse identifier in the NIB properties.  It cannot be set programmatically.
 3.	Create your UITableViewCell subclass in Objective-C
 4.	Set the class of the cell in IB to be your custom class
 5.	Manually write your UIOutlet properties for the custom view properties you want to access from the cell.

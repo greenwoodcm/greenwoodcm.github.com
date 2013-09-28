@@ -2,16 +2,19 @@
 layout: default
 ---
 
-<div class="row">
-
-  <div class="span9 pull-right">
-    <h2>{{site.author.name}}</h2>
-    <h4><img src="images/icons/glyphicons_010_envelope.png" style="width: 20px;"/><a href="mailto:{{site.author.email}}">  {{site.author.email}}</a></h4>
-    <h4><img src="images/icons/GitHub-Mark-32px.png" style="width: 20px; height: 20px;"/>  <a href="http://www.github.com/{{site.author.github}}">Github</a></h4>
-    <h4><img src="images/icons/twitter-bird-light-bgs.png" style="width: 20px; height: 20px;"/>  <a href="http://www.twitter.com/{{site.author.twitter}}">Twitter</a></h4>
-  </div>
-  <div class="span3">
-    <img src="images/me2.jpeg" />
-  </div>
-
+{% assign index = true %}
+<div itemscope itemtype="http://schema.org/Blog">
+{% for post in paginator.posts %}
+{% assign content = post.content %}
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">{% include article.html %}</article>
+{% endfor %}
 </div>
+<nav id="pagenavi">
+    {% if paginator.previous_page %}
+        <a href="{{paginator.previous_page}}" class="prev">Prev</a>
+    {% endif %}
+    {% if paginator.next_page %}
+        <a href="{{paginator.next_page}}" class="next">Next</a>
+    {% endif %}
+    <div class="center"><a href="{{ root_url }}/blog/archives">Blog Archives</a></div>
+</nav>

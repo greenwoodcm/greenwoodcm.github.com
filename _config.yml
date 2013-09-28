@@ -4,12 +4,17 @@
 
 url: http://cmgreenwood.com
 title: Chris Greenwood
-subtitle: 
-author: 
-  name: Chris Greenwood
-  email: greenwoodcm@gmail.com
+subtitle: Chris Greenwood
+author: Chris Greenwood
+email: greenwoodcm@gmail.com
 simple_search: http://google.com/search
 description:
+
+navigation:
+- text: Home
+  url: /index.html
+- text: Blog
+  url: /blog/index.html
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -46,7 +51,7 @@ pygments: false # default python pygments have been replaced by pygments.rb
 paginate: 10          # Posts per page on the blog index
 pagination_dir: blog  # Directory base for pagination URLs eg. /blog/page/2/
 recent_posts: 5       # Posts in the sidebar Recent Posts section
-excerpt_link: "Read on &rarr;"  # "Continue reading" link text at the bottom of excerpted articles
+excerpt_link: "Read on"  # "Continue reading" link text at the bottom of excerpted articles
 
 titlecase: true       # Converts page and post titles to titlecase
 
@@ -74,6 +79,9 @@ github_skip_forks: true
 twitter_user: chrismgreenwood
 twitter_tweet_button: true
 
+# LinkedIn
+linkedin_user: greenwoodcm
+
 # Google +1
 google_plus_one: false
 google_plus_one_size: medium
@@ -96,7 +104,7 @@ disqus_short_name: chrisgreenwood
 disqus_show_comment_count: false
 
 # Google Analytics
-google_analytics_tracking_id:
+google_analytics_tracking_id: UA-41474288-1
 
 # Facebook Like
 facebook_like: false
