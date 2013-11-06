@@ -1,0 +1,208 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Radio buttons with Bootstrap and Knockout - Chris Greenwood</title>
+	<meta name="author" content="Chris Greenwood">
+
+	
+	<meta name="description" content="Radio Buttons With Bootstrap and Knockout I&rsquo;m currently building a web app using Knockout.js as a frontend framework, with Bootstrap as my CSS &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Chris Greenwood" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+
+	<link rel="icon" type="image/png" href="/favicon.ico">
+
+	
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">	
+	<a href="/"><img src='/images/me2.jpeg' alt='Profile Picture' style='width: 160px;' /></a>
+</div>
+
+<p class="title">Chris Greenwood</p>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/chrismgreenwood" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/greenwoodcm" title="GitHub">GitHub</a>
+		
+		
+		
+		<a class="linkedin" href="http://www.linkedin.com/in/greenwoodcm">LinkedIn</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Radio Buttons With Bootstrap and Knockout</h1>
+	<div class="entry-content" itemprop="articleBody"><p>I&rsquo;m currently building a web app using <a href="http://knockoutjs.com/">Knockout.js</a> as a frontend framework, with Bootstrap as my CSS framework.  I wanted to create a button group in which only a single button at a time could be selected (a set of <em>radio buttons</em>).  I then wanted to detect when those buttons change value, and which value is subsequently selected.</p>
+
+<p>There are a variety of ways to go about this.  You could solve this using jQuery events, Bootstrap-specific events, or within the Knockout framework.  I decided to do it using a Knockout <code>click</code> binding so that once the event does fire, I&rsquo;m right where I need to be to update my ViewModel, and possibly my backend.</p>
+
+<!-- more -->
+
+
+<p>Here&rsquo;s what the HTML looks like:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;radio&quot;</span> <span class="na">class=</span><span class="s">&quot;btn-group&quot;</span> <span class="na">data-toggle=</span><span class="s">&quot;buttons-radio&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">class=</span><span class="s">&quot;btn active&quot;</span> <span class="na">data-bind=</span><span class="s">&quot;click: $root.updateReadPreferences&quot;</span> <span class="na">value=</span><span class="s">&quot;all&quot;</span><span class="nt">&gt;</span>All<span class="nt">&lt;/button&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">class=</span><span class="s">&quot;btn&quot;</span> <span class="na">data-bind=</span><span class="s">&quot;click: $root.updateReadPreferences&quot;</span> <span class="na">value=</span><span class="s">&quot;unread&quot;</span><span class="nt">&gt;</span>Unread<span class="nt">&lt;/button&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And then the JS in my ViewModel:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">FeedsViewModel</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">self</span><span class="p">.</span><span class="nx">readPreferences</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">self</span><span class="p">.</span><span class="nx">updateReadPreferences</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">koElem</span><span class="p">,</span> <span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">self</span><span class="p">.</span><span class="nx">readPreferences</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Unread or all? : &#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A Knockout event takes the Knockout view object that is in scope for the DOM element as its first parameter &ndash; in our case it is the FeedsViewModel.  The second parameter, if provided, is the HTML DOM element that gave rise to the event trigger.  We simply have to use jQuery to ask for the &ldquo;value&rdquo; attribute for the DOM element, and then update our ViewModel accordingly.  One downside of this approach is that it is fairly verbose &ndash; we need a <code>value</code> attribute and a <code>click</code> event declared for each button in the button group.  Another way to do it might be to add the <code>click</code> event to the button group div instead of each button, but then you have to iterate through the children of the button group checking for the button that has the CSS class <code>active</code>.  This creates a race condition between the Knockout event being triggered and Bootstrap updating the CSS.  Since button groups will generally only contain a handful of elements, I found it easiest to just declare the <code>click</code> events at the button level.</p>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2013
+
+    Chris Greenwood
+
+<br>
+Powered by Octopress.
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'chrisgreenwood';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/';
+        var disqus_url = 'http://cmgreenwood.com/blog/2013/05/28/radio-buttons-with-bootstrap-and-knockout/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-41474288-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+		</div>
+	</div>
+</body>
+</html>

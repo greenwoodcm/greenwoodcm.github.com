@@ -1,0 +1,245 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Aliasing when creating EPS files in Matlab - Chris Greenwood</title>
+	<meta name="author" content="Chris Greenwood">
+
+	
+	<meta name="description" content="Aliasing When Creating EPS Files in Matlab I have been working in LaTeX for a paper I&rsquo;m writing, and have found that if you want to include &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Chris Greenwood" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://cmgreenwood.com/blog/2013/09/27/aliasing-in-eps-files/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+
+	<link rel="icon" type="image/png" href="/favicon.ico">
+
+	
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">	
+	<a href="/"><img src='/images/me2.jpeg' alt='Profile Picture' style='width: 160px;' /></a>
+</div>
+
+<p class="title">Chris Greenwood</p>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/chrismgreenwood" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/greenwoodcm" title="GitHub">GitHub</a>
+		
+		
+		
+		<a class="linkedin" href="http://www.linkedin.com/in/greenwoodcm">LinkedIn</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Aliasing When Creating EPS Files in Matlab</h1>
+	<div class="entry-content" itemprop="articleBody"><p>I have been working in LaTeX for a paper I&rsquo;m writing, and have found that if you want to include Matlab graphs in a LaTeX document, EPS files are by far the best way to go.  EPS files are converted to PDF graphics and then included in the resulting PDF, which looks way better than plugging a JPEG or a PNG file in directly.</p>
+
+<p>However, I came across a weird issue when trying to save one of my graphs.  I used the <code>confusionmat</code> function in Matlab to create a confusion matrix from a set of ground truth and observation data pairs.  I then wrote a simple script to create a nice graphical representation of the confusion matrix (adapted from <a href="http://wrongpc.blogspot.com/2010/08/draw-confusion-matrix-in-matlab.html">here</a>).</p>
+
+<!-- more -->
+
+
+<p>The only problem was that when I tried to export as a EPS file, I got the following weird aliasing effect.</p>
+
+<p><img style="width:50%;" src="/images/confusionmat_alias.png"></img></p>
+
+<p>I looked at a bunch of different options for fixing the issue: <a href="http://www.latex-community.org/forum/viewtopic.php?f=45&amp;p=53569">different LaTeX compiler settings</a>, <a href="http://stackoverflow.com/questions/6614207/how-to-export-non-blurry-eps-images">applying filters in Matlab</a>, <a href="http://pages.cs.wisc.edu/~ghost/">using GhostView as the viewer for the EPS file</a>.  None of it seemed to help.  I think at the end of the day, it didn&rsquo;t have to do with the EPS file itself, but the software/driver my Mac was using to view the EPS file and subsequently convert it to a PDF graphic.</p>
+
+<p>The solution that ended up working for me?  A surprisingly easy one.  I finally found that if I scaled the matrix itself up by a large factor before graphing into a Matlab figure, the aliasing effect was eliminated.  I had to change some of the logic that printed confusion matrix numbers themselves at the right position, but it was a surprisingly simple fix to a strange problem.  Full script below.</p>
+
+<pre><code>function [pcts] = confusion_plot(cmat, order)
+
+SCALE = 100;
+
+% turn into percentages
+totals = sum(cmat, 2);
+pcts = zeros(size(cmat));
+for i = 1:size(cmat, 1)
+    for j = 1:size(cmat, 2)
+        point = cmat(i,j);
+        total = totals(i);
+        pcts(i,j) = point / total;
+    end
+end
+
+% flip so that the darks are high percents
+pcts_flipped = 1 - pcts;
+
+pcts_scaled = scale_matrix(pcts_flipped, SCALE);
+
+imagesc(pcts_scaled);
+colormap(gray);
+
+set(gca,'FontSize',20);
+set(gca,'XTick',SCALE/2+1/2:SCALE:SCALE*length(order)-SCALE/2);
+set(gca,'YTick',SCALE/2+1/2:SCALE:SCALE*length(order)-SCALE/2);
+set(gca,'XTickLabel',order);
+set(gca,'YTickLabel',order);
+set(gca, 'Ticklength', [0 0])
+set(gca,'XAxisLocation','top');
+ylabel('Ground Truth Object Count');
+xlabel('Observed Object Count');
+
+% show the text percentage values
+for i = 1:size(pcts, 1)
+    for j = 1:size(pcts, 2)
+
+        pct = pcts(i,j);
+
+        color = [0 0 0];
+        if pct &gt; 0.6
+            color = [1 1 1];
+        end
+
+        text(j*SCALE-SCALE/2+1/2,i*SCALE-SCALE/2+1/2,num2str(cmat(i,j), 4), ...
+            'FontSize', 20, ...
+            'FontWeight', 'bold', ...
+            'HorizontalAlignment', 'center', ...
+            'Color', color);
+    end
+end
+
+end
+
+function [scaled] = scale_matrix(mat, scale)
+
+scaled = zeros(scale * size(mat));
+
+for i = 1:size(scaled, 1)
+    for j = 1:size(scaled, 2)
+        i_prime = ceil(i / scale);
+        j_prime = ceil(j / scale);
+        scaled(i, j) = mat(i_prime, j_prime);
+    end
+end
+
+end
+</code></pre>
+
+<p>Here&rsquo;s the resulting EPS file, with the aliasing pretty much eliminated.</p>
+
+<p><img style="width:50%;" src="/images/confusionmat_nonalias.png"></img></p>
+
+<p>I&rsquo;m sure its not the most elegant way to solve the issue, but if you&rsquo;re looking for a simple way to minimize the odd aliasing effect caused by exporting Matlab figures to EPS files, give this approach a shot.</p>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2013
+
+    Chris Greenwood
+
+<br>
+Powered by Octopress.
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'chrisgreenwood';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://cmgreenwood.com/blog/2013/09/27/aliasing-in-eps-files/';
+        var disqus_url = 'http://cmgreenwood.com/blog/2013/09/27/aliasing-in-eps-files/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-41474288-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+		</div>
+	</div>
+</body>
+</html>
