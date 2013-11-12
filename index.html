@@ -7,7 +7,7 @@
 	<meta name="author" content="Chris Greenwood">
 
 	
-	<meta name="description" content="Sep 27th, 2013 snippet Aliasing When Creating EPS Files in Matlab I have been working in LaTeX for a paper I&rsquo;m writing, and have found that if &hellip;">
+	<meta name="description" content="Nov 12th, 2013 snippet Overriding isEquals in Objective-C I am currently working on a small personal project, an iPhone app written in Objective-C. &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,57 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-12T07:44:00-08:00" data-updated="true" itemprop="datePublished">Nov 12<span>th</span>, 2013</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/snippet/'>snippet</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2013/11/12/overriding-isequals-in-objectivec/" itemprop="url">Overriding isEquals in Objective-C</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I am currently working on a small personal project, an iPhone app written in Objective-C.  I needed a simple data structure to hold a 2-element tuple of integers.  I originally implemented this as a C-struct:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">struct</span> <span class="n">Index</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">NSInteger</span> <span class="n">row</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">NSInteger</span> <span class="n">column</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="k">typedef</span> <span class="k">struct</span> <span class="n">Index</span> <span class="n">Index</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This worked fine, but I often found myself doing a multiline declare-then-set-members pattern every time I wanted to use the data structure.  To simplify, I added a small C function to generate structs, similar to <code>CGRectMake</code>:</p>
+
+
+		
+		<a href="/blog/2013/11/12/overriding-isequals-in-objectivec/" class="more-link">Read on</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">

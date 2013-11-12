@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snippet | Chris Greenwood]]></title>
   <link href="http://cmgreenwood.com/blog/categories/snippet/atom.xml" rel="self"/>
   <link href="http://cmgreenwood.com/"/>
-  <updated>2013-09-27T23:57:44-07:00</updated>
+  <updated>2013-11-12T08:16:27-08:00</updated>
   <id>http://cmgreenwood.com/</id>
   <author>
     <name><![CDATA[Chris Greenwood]]></name>
@@ -12,6 +12,171 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Overriding isEquals in Objective-C]]></title>
+    <link href="http://cmgreenwood.com/blog/2013/11/12/overriding-isequals-in-objectivec/"/>
+    <updated>2013-11-12T07:44:00-08:00</updated>
+    <id>http://cmgreenwood.com/blog/2013/11/12/overriding-isequals-in-objectivec</id>
+    <content type="html"><![CDATA[<p>I am currently working on a small personal project, an iPhone app written in Objective-C.  I needed a simple data structure to hold a 2-element tuple of integers.  I originally implemented this as a C-struct:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">struct</span> <span class="n">Index</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">NSInteger</span> <span class="n">row</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSInteger</span> <span class="n">column</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">};</span>
+</span><span class='line'><span class="k">typedef</span> <span class="k">struct</span> <span class="n">Index</span> <span class="n">Index</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>This worked fine, but I often found myself doing a multiline declare-then-set-members pattern every time I wanted to use the data structure.  To simplify, I added a small C function to generate structs, similar to <code>CGRectMake</code>:</p>
+
+<!-- more -->
+
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Index</span> <span class="nf">IndexMake</span><span class="p">(</span><span class="n">NSInteger</span> <span class="n">r</span><span class="p">,</span> <span class="n">NSInteger</span> <span class="n">c</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Index</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'><span class="n">index</span><span class="p">.</span><span class="n">row</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+</span><span class='line'><span class="n">index</span><span class="p">.</span><span class="n">column</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+</span><span class='line'><span class="k">return</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>This worked great until I needed to put the data structure into a collection such as an NSMutableSet.  Because the contained objects in such a collection need to be Objective-C pointers, you need to encapsulate the struct.  According to <a href="http://stackoverflow.com/questions/4516991/whats-the-best-way-to-put-a-c-struct-in-an-nsarray">this SO post</a>, the correct way to do so is this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Index</span> <span class="n">index</span> <span class="o">=</span> <span class="n">IndexMake</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
+</span><span class='line'><span class="p">[</span><span class="n">selectedIndices</span> <span class="nl">addObject:</span><span class="p">[</span><span class="n">NSValue</span> <span class="nl">valueWithBytes:</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">index</span> <span class="nl">objCType:</span><span class="k">@encode</span><span class="p">(</span><span class="n">Index</span><span class="p">)]]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>So this is now starting to get a bit ugly.  Once I realized that I would be using this data structure all throughout my app, I decided it would be way easier to just make it a proper Objective-C class.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">GridIndex</span> : <span class="nc">NSObject</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSInteger</span> <span class="n">row</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSInteger</span> <span class="n">column</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>With a static initializer, this really cleaned up the dependent code.  Of course, this also promptly broke the entire program.  Why?  Because I hadn&rsquo;t overridden the default <code>isEqual:</code> method in my custom class.  My first attempt at doing so did not work as expected:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nl">isEqual:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">object</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">[(</span><span class="n">NSObject</span><span class="o">*</span><span class="p">)</span><span class="n">object</span> <span class="nl">isKindOfClass:</span><span class="p">[</span><span class="n">GridIndex</span> <span class="n">class</span><span class="p">]])</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'><span class="n">GridIndex</span> <span class="o">*</span><span class="n">other</span> <span class="o">=</span> <span class="p">(</span><span class="n">GridIndex</span><span class="o">*</span><span class="p">)</span><span class="n">object</span><span class="p">;</span>
+</span><span class='line'><span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">row</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">row</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">self</span><span class="p">.</span><span class="n">column</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">column</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>After adding a bunch of debugging I realized that the problem was when checking if an NSSet contained a GridIndex with a specific row and column.  More debugging showed that my <code>isEqual:</code> method was not called deterministically by the set containment method.  Sometimes my overridden function was called and worked as expected, sometimes it was totally bypassed and the result was always false.</p>
+
+<p>After some more research, <a href="http://nshipster.com/equality/">this post</a> gave me the answer.  As it turns out, to override <code>isEquals:</code> in Objective-C you are actually expected to do three things.</p>
+
+<blockquote><ul>
+<li>Implement a new <code>isEqualTo__ClassName__:</code> method, which performs the meaningful value comparison.</li>
+<li>Override <code>isEqual:</code> to make class and object identity checks, falling back on the aforementioned value comparison method.</li>
+<li>Override <code>hash</code>.</li>
+</ul>
+</blockquote>
+
+<p>Doing so fixed the problem.  Good thing someone had already written on this issue because I did not realize all of this was strictly necessary when overriding a simple <code>isEquals:</code> method.</p>
+
+<p>Here&rsquo;s my final implementation:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nl">isEqualToGridIndex:</span><span class="p">(</span><span class="n">GridIndex</span><span class="o">*</span><span class="p">)</span><span class="n">other</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">row</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">row</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">self</span><span class="p">.</span><span class="n">column</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">column</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&amp;</span><span class="n">ndash</span><span class="p">;(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nl">isEqual:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">object</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">[(</span><span class="n">NSObject</span><span class="o">*</span><span class="p">)</span><span class="n">object</span> <span class="nl">isKindOfClass:</span><span class="p">[</span><span class="n">GridIndex</span> <span class="n">class</span><span class="p">]])</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'><span class="k">return</span> <span class="p">[</span><span class="n">self</span> <span class="nl">isEqualToGridIndex:</span><span class="p">(</span><span class="n">GridIndex</span><span class="o">*</span><span class="p">)</span><span class="n">object</span><span class="p">];</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&amp;</span><span class="n">ndash</span><span class="p">;(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="n">hash</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">row</span> <span class="o">+</span> <span class="n">self</span><span class="p">.</span><span class="n">column</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Aliasing when creating EPS files in Matlab]]></title>
@@ -252,61 +417,6 @@ end
 </span><span class='line'>
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
 </span><span class='line'><span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RestKit POST with nested data]]></title>
-    <link href="http://cmgreenwood.com/blog/2013/05/23/restkit-post/"/>
-    <updated>2013-05-23T00:00:00-07:00</updated>
-    <id>http://cmgreenwood.com/blog/2013/05/23/restkit-post</id>
-    <content type="html"><![CDATA[<p>I am using <a href="http://www.restkit.org">RestKit</a> to map objects in my iPhone application to RESTful requests to my <a href="http://flask.pocoo.org/">Flask</a> server.  I have to use RKRequestMapping to specify the format of the data a POST request expects.  This works fine when the data is flat, but I had trouble when there was an array of nested mappings that needed to be accounted for.  For example, here is the object that will be passed as data to the POST request:</p>
-
-<!-- more -->
-
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">TestArgs</span> : <span class="nc">NSObject</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@property</span> <span class="p">(</span><span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">name</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSArray</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">users</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>The users array is an array of dictionaries, each containing the keys {&lsquo;id&rsquo;, &lsquo;type&rsquo;}.  What I expected to see on the Flask end in the <code>request.form</code> variable was:</p>
-
-<p><div>
-  <pre><code class='python'>{&amp;lsquo;name&amp;rsquo;: &amp;lsquo;theName&amp;rsquo;, &amp;lsquo;users&amp;rsquo;: [{&amp;lsquo;id&amp;rsquo;:1, &amp;lsquo;type&amp;rsquo;:&amp;lsquo;user&amp;rsquo;},{&amp;lsquo;id&amp;rsquo;:2,&amp;lsquo;type&amp;rsquo;:&amp;lsquo;admin&amp;rsquo;}]}</code></pre>
-</div>
-</p>
-
-<p>What I actually got was:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">{</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">name</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;:</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">theName</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">users</span><span class="p">[][</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nb">id</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;]</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;:</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">users</span><span class="p">[][</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nb">id</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;]</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;:</span> <span class="mi">2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">users</span><span class="p">[][</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nb">type</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;]</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;:</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">user</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">users</span><span class="p">[][</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nb">type</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;]</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;:</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">admin</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Not very helpful.  The reason this happens is that form data is generally encoded in URL encoding, not JSON encoding.  URL encoding doesn&rsquo;t handle array values very well, so I needed to use JSON encoding to capture the nested information I wanted to send.  Took me a while, but as it turns out I had to change two things in my code to make this work.  First, on the client side, I had to change the serialization type that RestKit uses to serialize POST data:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">RKObjectManager</span> <span class="o">*</span><span class="n">objectManager</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="n">objectManager</span> <span class="nl">setRequestSerializationMIMEType:</span><span class="n">RKMIMETypeJSON</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Second, on the server side, I had to access the JSON data that was submitted with the POST differently:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">post_data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span>
-</span><span class='line'><span class="n">user_array</span> <span class="o">=</span> <span class="n">post_data</span><span class="p">[</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">users</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;]</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
