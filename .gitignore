@@ -1,0 +1,6 @@
+
+*.pyc
+*.pid
+
+#virtualenv
+env

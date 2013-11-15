@@ -1,0 +1,32 @@
+Title: UITableViewCell from Nib
+Category: snippet
+Tags: ios, objective-c, uitableviewcontroller, uitableviewcell
+
+As far as I can tell, this is the best and most correct way to create a custom UITableViewCell that has a backing Objective-C class (so custom subviews) and is layed out using a Nib.  If anyone knows of a better way to do it, let me know.  There's a bunch of conflicting information on the web.
+
+<!-- more -->
+
+1.	Create your Nib
+2.	Remove the default UIView from XIB, replace it with a UITableViewCell
+3.	**Update:** Remember to set a reuse identifier in the NIB properties.  It cannot be set programmatically.
+3.	Create your UITableViewCell subclass in Objective-C
+4.	Set the class of the cell in IB to be your custom class
+5.	Manually write your UIOutlet properties for the custom view properties you want to access from the cell.
+6.	Add sub-views in IB that correspond to those outlets
+7.	Select the cell and open the right menu, right tab (Connections inspector).  There you should see the custom outlets you just coded up in the Outlets list
+8.	Select the handle to the right of each outlet and drag it over to the subview in IB that corresponds to that outlet
+9.	Finally, in your `tableView:cellForRowAtIndexPath:` method, instantiate the cell
+
+The cell needs to be instantiated using the Nib to display your custom layout:
+
+	:::objc
+	...
+	NSString *ident = @"customCell";
+	CustomTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ident];
+
+	if(!cell)
+	{
+		NSArray *tlobjs = [[NSBundle mainBundle] loadNibNamed:@"CustomTableViewCell" owner:nil options:nil];
+		cell = (CustomTableViewCell*)[tlobjs objectAtIndex:0];
+	}
+	...
