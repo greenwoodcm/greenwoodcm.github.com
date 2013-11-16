@@ -4,3 +4,5 @@
 
 #virtualenv
 env
+
+.DS_Store

@@ -17,6 +17,10 @@
 {% assets filters="scss", output="css/test.css", "css/test.scss" %}
     <link rel="stylesheet" href="{{ SITEURL }}/{{ ASSET_URL }}">
 {% endassets %}
+    
+{% assets filters="scss", output="css/social.css", "css/social.scss" %}
+    <link rel="stylesheet" href="{{ SITEURL }}/{{ ASSET_URL }}">
+{% endassets %}
 
   <!--<link rel="shortcut icon" type="image/png" href="{{ USER_IMAGE }}" />-->
   {% block head %}{% endblock %}
@@ -51,6 +55,15 @@
       <li><a href="mailto:{{ CONTACT }}?subject=Hello" id="contact-link">Contact</a></li>
     </ul>
   </nav>
+    
+    <nav id="sub-nav">
+        <div class="social">
+            <a class="twitter" href="http://twitter.com/chrismgreenwood" title="Twitter"></a>
+            <a class="github" href="https://github.com/greenwoodcm" title="GitHub"></a>
+            <a class="linkedin" href="http://www.linkedin.com/in/greenwoodcm"></a>
+            <a class="rss" href="/atom.xml" title="RSS"></a>
+        </div>
+    </nav>
   <a href="http://pelican.notmyidea.org" class="fork-me">Powered by Pelican.</a>
 
 </header>
