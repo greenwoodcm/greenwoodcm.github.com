@@ -43,7 +43,7 @@ DEFAULT_PAGINATION = 10
 
 STATIC_PATHS = [
 	'extra/favicon.png',
-	'images/me2.jpeg'
+	'images'
 ]
 EXTRA_PATH_METADATA = {
 	'extra/favicon.png': {'path': 'favicon.ico'}

@@ -1,8 +1,13 @@
 
+# python things
 *.pyc
 *.pid
 
-#virtualenv
+# virtualenv things
 env
 
+# Mac OS X things
 .DS_Store
+
+# SASS things
+.sass-cache
