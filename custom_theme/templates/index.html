@@ -2,11 +2,15 @@
 {% block main_section %}
 <section class="main-section blog-section" id="blog-posts">
   {% for article in articles_page.object_list %}
-  <h3 class="date">{{article.locale_date}}</h3>
+
     <article>
+
+  	<div class="meta">
+  		<h3 class="date">{{article.locale_date}}</h3>
+  	</div>
 	<hgroup>
-	<h2><a href="{{article.url}}" title="Permalink to {{article.title}}">{{article.title}}</a></h2>
-	
+		<h2><a href="{{article.url}}" title="Permalink to {{article.title}}">{{article.title}}</a></h2>
+  		
 	</hgroup>
 	{{article.summary}}
 	</article>

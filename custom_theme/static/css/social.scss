@@ -9,8 +9,9 @@
 }
 
 #sub-nav .social {
-    float:left;
-    margin-right:15px;
+    margin-right:10%;
+    margin-left: 10%;
+    text-align: center;
 
     a {
         -webkit-border-radius:50%;
@@ -25,7 +26,6 @@
         zoom:1;
         *display:inline;
         text-indent:-9999px;
-        margin-right:15px;
         opacity:0.5;
         width:28px;
         height:28px;
@@ -44,7 +44,8 @@
         &.twitter { @include social-icon(#55CFF8, #24c1f6, 'twitter.png'); }
         &.github { @include social-icon(#afb6ca, #909ab6, 'github.png'); }
         &.linkedin { @include social-icon(#005A87, #003854, 'linkedin.png'); }
-        &.pinterest { @include social-icon(#be4037, #96332c, 'pinterest.png'); } 
+        &.pinterest { @include social-icon(#be4037, #96332c, 'pinterest.png'); }
+        &.rss { @include social-icon(#be4037, #96332c, 'rss.png')}
     }
 }
 
