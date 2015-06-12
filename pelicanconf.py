@@ -9,7 +9,7 @@ ABOUT = 'blah blah blah'
 
 USER_IMAGE = '/images/me2.jpeg'
 
-THEME = 'custom_theme'
+# THEME = 'custom_theme'
 
 TIMEZONE = 'Europe/Paris'
 

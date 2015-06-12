@@ -5,6 +5,9 @@
 
 # virtualenv things
 env
+venv
+
+output
 
 # Mac OS X things
 .DS_Store
