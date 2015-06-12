@@ -8,6 +8,7 @@ env
 venv
 
 output
+cache
 
 # Mac OS X things
 .DS_Store
